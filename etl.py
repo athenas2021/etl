@@ -1,16 +1,13 @@
 import pandas as pd
 import os
 
-CURR_DIR = os.path.dirname(os.path.realpath(__file__))
-filepath = f'{CURR_DIR}\COTAHIST_A2021.TXT'
-
-print(CURR_DIR, filepath)
+filepath = f'{os.path.dirname(os.path.realpath(__file__))}\COTAHIST_A2021.TXT'
 
 '''3.2 REGISTRO - 01 - COTAÇÕES HISTÓRICAS POR PAPEL-MERCADO '''
 # (2, 10) DATA DO PREGÃO FORMATO “AAAAMMDD”  N(08) 03 10 
 # (10, 12) CODBDI - CÓDIGO BDI 
 
-
+''' *Extract* '''
 # Importando as informações
 # Arquivo trabalhando é um .txt posicional (vamos usar o método readfwf)
 
@@ -29,4 +26,15 @@ df = pd.read_fwf(filepath, colspecs = colspecs, names = names, skiprows =1)
 df = df [df['codbdi']==2]
 # elimina esta coluna
 df = df.drop(['codbdi'], 1)
+
+''' *Transform* '''
+# Ajuste no campo data
+df['data_pregao'] = pd.to_datetime(df['data_pregao'], format='%Y%m%d')
+
+# Ajuste dos campos numéricos (campos decimais, 2 casas após ponto)
+df['preco_abertura'] = (df['preco_abertura'] / 100).astype(float)
+df['preco_maximo'] = (df['preco_maximo'] / 100).astype(float)
+df['preco_minimo'] = (df['preco_minimo'] / 100).astype(float)
+df['preco_fechamento'] = (df['preco_fechamento'] / 100).astype(float)
+
 print(df)
