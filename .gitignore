@@ -138,7 +138,7 @@ dmypy.json
 cython_debug/
 
 # Docs / Layouts
-*.txt
+COTAHIST_A2021.TXT
 *.pdf
 *.zip
 *.csv
